@@ -1,6 +1,8 @@
 import { useRef } from "react"
 import ScrollChrome from "./components/ScrollChrome.jsx"
 import LotusPetals from "./components/LotusPetals.jsx"
+import GlassShine from "./components/GlassShine.jsx"
+import LetterLift from "./components/LetterLift.jsx"
 import Hero from "./components/Hero.jsx"
 import Characters from "./components/Characters.jsx"
 import Opening from "./components/Opening.jsx"
@@ -19,6 +21,8 @@ export default function App() {
       <div className="bg-fade" aria-hidden="true" />
       <ScrollChrome />
       <LotusPetals />
+      <GlassShine />
+      <LetterLift />
       <Hero heroRef={heroRef} />
       <main>
         <Characters />

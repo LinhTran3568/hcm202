@@ -351,7 +351,85 @@ button {
   transform: translateY(0);
 }
 
-/* ===== Card frame effects ===== */
+/* ===== Card frame effects (3D tilt + corner accents + light sweep) ===== */
+
+.glass-frame {
+  position: relative;
+  transition: box-shadow 0.5s var(--ease-out);
+}
+
+.glass-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(
+    115deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 58%,
+    transparent 68%
+  );
+  background-size: 300% 100%;
+  background-position: 135% 0;
+  transition: opacity 0.35s var(--ease-out), background-position 0.9s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.glass-frame:hover .glass-shine,
+.glass-frame:active .glass-shine {
+  opacity: 1;
+  background-position: -80% 0;
+}
+
+.glass-shine::before,
+.glass-shine::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: transform 0.4s var(--ease-out), opacity 0.4s ease, border-color 0.4s ease,
+    filter 0.4s ease;
+}
+
+.glass-shine::before {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--gold);
+  border-left: 2px solid var(--gold);
+  transform-origin: top left;
+}
+
+.glass-shine::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 2px solid var(--gold);
+  border-right: 2px solid var(--gold);
+  transform-origin: bottom right;
+}
+
+.glass-frame:hover .glass-shine::before,
+.glass-frame:hover .glass-shine::after {
+  border-color: var(--gold-deep);
+  opacity: 1;
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 5px rgba(201, 162, 39, 0.55));
+}
+
+.glass-frame:hover {
+  box-shadow:
+    0 30px 64px rgba(43, 36, 32, 0.2),
+    0 8px 22px rgba(43, 36, 32, 0.1),
+    inset 0 0 0 1px rgba(201, 162, 39, 0.22);
+}
 
 .speech-card,
 .court-record,
@@ -384,6 +462,60 @@ button {
 
 .note-card:hover {
   transform: translateY(-3px) rotate(-0.4deg);
+}
+
+/* ===== Photo frames ===== */
+
+.dispute-context__frame,
+.court-gavel img,
+.photo-banner img,
+.debate-banner img {
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out);
+}
+
+.dispute-context__frame:hover,
+.court-gavel img:hover,
+.photo-banner img:hover,
+.debate-banner img:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: var(--shadow-3), 0 0 0 1px rgba(201, 162, 39, 0.18);
+}
+
+.dispute-context__frame {
+  overflow: hidden;
+}
+
+.dispute-context__frame img {
+  transition: transform 0.6s var(--ease-out);
+}
+
+.dispute-context__frame:hover img {
+  transform: scale(1.05);
+}
+
+.hcm-portrait__frame {
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+
+.hcm-portrait:hover .hcm-portrait__frame {
+  transform: rotate(-0.8deg) translateY(-4px);
+  box-shadow:
+    inset 0 0 0 1px rgba(168, 130, 47, 0.45),
+    0 20px 44px rgba(43, 36, 32, 0.26),
+    0 4px 10px rgba(43, 36, 32, 0.14);
+}
+
+.debate__interjection {
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.debate__interjection:hover {
+  transform: translateY(-2px);
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: var(--shadow-2);
 }
 
 /* ===== Moving accent text ===== */
@@ -426,6 +558,44 @@ button {
   color: transparent;
   -webkit-text-fill-color: transparent;
   animation: text-shimmer 7s ease-in-out infinite;
+}
+
+/* ===== Letter lift (chữ lướt) ===== */
+
+[data-letters] .ll-char {
+  display: inline-block;
+  white-space: pre;
+  transform-origin: 50% 100%;
+  transition: transform 0.45s var(--ease-out), color 0.45s ease, text-shadow 0.45s ease;
+  transition-delay: calc(var(--char-i, 0) * 20ms);
+  will-change: transform;
+}
+
+[data-letters]:hover .ll-char,
+[data-letters]:focus-within .ll-char {
+  transform: translateY(-0.28em) rotate(1.5deg) scale(1.06);
+  color: var(--red);
+  text-shadow: 0 12px 26px rgba(155, 44, 44, 0.3);
+}
+
+.court-record__title[data-letters]:hover .ll-char,
+.section-title--accent[data-letters]:hover .ll-char {
+  -webkit-text-fill-color: currentColor;
+  background-image: none;
+  color: var(--red);
+}
+
+.hero__title[data-letters]:hover .ll-char {
+  color: var(--red);
+}
+
+.pull-quote[data-letters]:hover .ll-char {
+  color: #ead9b4;
+  text-shadow: 0 12px 26px rgba(201, 162, 39, 0.4);
+}
+
+.section-title--accent[data-letters]:hover .ll-char {
+  color: var(--gold-deep);
 }
 
 .divider-ornament {

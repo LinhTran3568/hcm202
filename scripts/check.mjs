@@ -84,7 +84,7 @@ const report = await page.evaluate(() => {
   const mcSvg = document.querySelector(".char-card--mc svg")?.innerHTML || ""
   const iconsDistinct = new Set([motherSvg, lanSvg, judgeSvg, mcSvg]).size === 4
   const courtGavel = !!document.querySelector(".court-gavel img")
-  const text = document.body.innerText
+  const text = document.body.innerText.replace(/\u00A0/g, " ")
   const hasFullPullQuote = text.includes("Có thể sống riêng về không gian, nhưng không sống riêng về trách nhiệm và tình cảm.")
   return {
     imgs,
