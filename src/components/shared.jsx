@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, Fragment } from "react"
 import Reveal from "./Reveal.jsx"
 import {
   IconMic,
@@ -87,14 +87,45 @@ export function NoteCard({ note }) {
 }
 
 export function SectionHead({ roman, eyebrow, title, lead, center = false, tone = "" }) {
+  const titleRef = useRef(null)
+  const words = title.split(" ")
+
+  useEffect(() => {
+    const el = titleRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            el.classList.add("is-visible")
+            io.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.2, rootMargin: "0px 0px 15% 0px" },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <div className={`section-head ${center ? "section-head--center" : ""}`}>
       <div className="section-head__row">
         {roman && <span className="section-head__roman" aria-hidden="true">{roman}</span>}
         <div className="section-head__main">
           {eyebrow && <p className={`eyebrow ${center ? "eyebrow--center" : ""}`}>{eyebrow}</p>}
-          <h2 className={`section-title ${center ? "section-title--center" : ""} ${tone ? `section-title--${tone}` : ""}`}>
-            {title}
+          <h2
+            ref={titleRef}
+            className={`section-title ${center ? "section-title--center" : ""} ${tone ? `section-title--${tone}` : ""}`}
+          >
+            {words.map((w, i) => (
+              <Fragment key={i}>
+                <span className="title-word" style={{ "--word-i": i }}>
+                  {w}
+                </span>
+                {i < words.length - 1 ? " " : null}
+              </Fragment>
+            ))}
           </h2>
         </div>
       </div>
